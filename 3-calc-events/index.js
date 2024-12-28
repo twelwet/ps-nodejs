@@ -4,10 +4,7 @@ const add = require('./actions/add.js');
 const subtract = require('./actions/subtract.js');
 const multiply = require('./actions/multiply.js');
 const divide = require('./actions/divide.js');
-const { ACTIONS, printResult } = require('./util/util.js');
-
-const DEFAULT_NUM = 0;
-const DEFAULT_ACTION_NAME = 'add';
+const { ACTIONS, validate, print } = require('./util/util.js');
 
 const myEmitter = new EventEmitter();
 
@@ -19,12 +16,11 @@ const actions = [
 ];
 
 for (const action of actions) {
-	myEmitter.on(action.name, printResult);
+	myEmitter.on(action.name, print);
 }
+myEmitter.on(false, print);
 
-const firstNum = Number(argv[2]) || DEFAULT_NUM;
-const secondNum = Number(argv[3]) || DEFAULT_NUM;
-const actionName = actions.map((it) => it.name).find((it) => it === argv[4]) ? argv[4] : DEFAULT_ACTION_NAME;
-const { fn, symbol } = actions.find((it) => it.name === actionName);
+const { isOkay, payload, errMessages } = validate(argv[2], argv[3], argv[4]);
 
-myEmitter.emit(actionName, firstNum, secondNum, symbol, fn);
+myEmitter.emit(payload.actionName, { isOkay, payload, errMessages }, actions);
+myEmitter.emit(isOkay, { isOkay, payload, errMessages }, actions);
