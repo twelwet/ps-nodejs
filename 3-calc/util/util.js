@@ -1,5 +1,57 @@
-const printResult = (a, b, symbol, fn) => {
-	console.log(`${a} ${symbol} ${b} = ${fn(a, b)}`);
+const ACTIONS = {
+	ADD: 'add',
+	SUBTRACT: 'subtract',
+	MULTIPLY: 'multiply',
+	DIVIDE: 'divide',
 };
 
-module.exports = { printResult }
+const isNumber = (value) => {
+	if (typeof value === 'number' && !Number.isNaN(value)) {
+		return true;
+	}
+	return false;
+};
+
+const validate = (argv2, argv3, argv4) => {
+	const payload = {
+		valueOne: Number(argv2),
+		valueTwo: Number(argv3),
+		actionName: argv4.toUpperCase().toLowerCase(),
+	};
+	const errMessages = [];
+
+	if (!isNumber(payload.valueOne)) {
+		errMessages.push(`Аргумент '${argv2}' должен быть числом.`);
+	}
+
+	if (!isNumber(payload.valueTwo)) {
+		errMessages.push(`Аргумент '${argv3}' должен быть числом.`);
+	}
+
+	if (!Object.values(ACTIONS).find((it) => it === payload.actionName)) {
+		errMessages.push(`Аргумент '${argv4}' должен быть одним из списка [ ${Object.values(ACTIONS).join(', ')} ].`);
+	}
+
+	if (errMessages.length > 0) {
+		return { isOkay: false, payload: {}, errMessages };
+	}
+
+	return { isOkay: true, payload, errMessages };
+};
+
+const print = ({ isOkay, payload, errMessages }, actions) => {
+	if (isOkay) {
+		const { valueOne, valueTwo, actionName } = payload;
+		const { symbol, fn } = actions.find((it) => it['name'] === actionName);
+		console.log(`${valueOne} ${symbol} ${valueTwo} = ${fn(valueOne, valueTwo)}`);
+	} else {
+		console.log('Невалидные данные:');
+		console.log(`${errMessages.join('\n')}`);
+		console.log('-----');
+		console.log('Пример валидного ввода:');
+		console.log('>node index.js 2 2 add');
+		console.log('2 + 2 = 4');
+	}
+};
+
+module.exports = { ACTIONS, validate, print };
