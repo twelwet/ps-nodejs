@@ -19,13 +19,11 @@ const isValid = (value, unitMin, unitMax) => {
 };
 
 const validate = (argv2, argv3, argv4) => {
-	console.log([argv2, argv3, argv4])
 	const payload = {
 		hours: Number(argv2),
 		minutes: Number(argv3),
 		seconds: Number(argv4),
 	};
-	console.log(payload)
 	const errMessages = [];
 
 	if (!isValid(payload.hours, Hour.MIN, Hour.MAX)) {
