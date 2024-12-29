@@ -39,19 +39,28 @@ const validate = (argv2, argv3, argv4) => {
 	return { isOkay: true, payload, errMessages };
 };
 
-const print = ({ isOkay, payload, errMessages }, actions) => {
-	if (isOkay) {
-		const { valueOne, valueTwo, actionName } = payload;
-		const { symbol, fn } = actions.find((it) => it['name'] === actionName);
-		console.log(`${valueOne} ${symbol} ${valueTwo} = ${fn(valueOne, valueTwo)}`);
-	} else {
-		console.log('Невалидные данные:');
-		console.log(`${errMessages.join('\n')}`);
-		console.log('-----');
-		console.log('Пример валидного ввода:');
-		console.log('>node index.js 2 2 add');
-		console.log('2 + 2 = 4');
+const calculate = (payload, actions) => {
+	const { valueOne, valueTwo, actionName } = payload;
+	const { symbol, fn } = actions.find((it) => it['name'] === actionName);
+	return {
+		valueOne,
+		valueTwo,
+		symbol,
+		result: fn(valueOne, valueTwo),
 	}
 };
 
-module.exports = { ACTIONS, validate, print };
+const print = ({ valueOne, valueTwo, symbol, result }) => {
+	console.log(`${valueOne} ${symbol} ${valueTwo} = ${result}`);
+};
+
+const printErrors = (errMessages) => {
+	console.log('Невалидные данные:');
+	console.log(`${errMessages.join('\n')}`);
+	console.log('-----');
+	console.log('Пример валидного ввода:');
+	console.log('>node index.js 2 2 add');
+	console.log('2 + 2 = 4');
+};
+
+module.exports = { ACTIONS, validate, calculate, print, printErrors };

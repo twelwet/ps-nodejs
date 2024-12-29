@@ -3,7 +3,7 @@ const add = require('./actions/add.js');
 const subtract = require('./actions/subtract.js');
 const multiply = require('./actions/multiply.js');
 const divide = require('./actions/divide.js');
-const { ACTIONS, validate, print } = require('./util/util.js');
+const { ACTIONS, validate, calculate, print, printErrors } = require('./util/util.js');
 
 const actions = [
 	{ name: ACTIONS.ADD, fn: add, symbol: '+' },
@@ -12,4 +12,10 @@ const actions = [
 	{ name: ACTIONS.DIVIDE, fn: divide, symbol: '/' },
 ];
 
-print(validate(argv[2], argv[3], argv[4]), actions);
+const { isOkay, payload, errMessages } = validate(argv[2], argv[3], argv[4]);
+
+if (isOkay) {
+	print(calculate(payload, actions));
+} else {
+	printErrors(errMessages);
+}

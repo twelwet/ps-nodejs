@@ -4,7 +4,7 @@ const add = require('./actions/add.js');
 const subtract = require('./actions/subtract.js');
 const multiply = require('./actions/multiply.js');
 const divide = require('./actions/divide.js');
-const { ACTIONS, validate, print } = require('./util/util.js');
+const { ACTIONS, validate, calculate, print, printErrors } = require('./util/util.js');
 
 const myEmitter = new EventEmitter();
 
@@ -18,9 +18,12 @@ const actions = [
 for (const action of actions) {
 	myEmitter.on(action.name, print);
 }
-myEmitter.on(false, print);
+myEmitter.on(false, printErrors);
 
 const { isOkay, payload, errMessages } = validate(argv[2], argv[3], argv[4]);
 
-myEmitter.emit(payload.actionName, { isOkay, payload, errMessages }, actions);
-myEmitter.emit(isOkay, { isOkay, payload, errMessages }, actions);
+if (isOkay) {
+	myEmitter.emit(payload.actionName, calculate(payload, actions));
+} else {
+	myEmitter.emit(false, errMessages);
+}
