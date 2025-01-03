@@ -12,10 +12,9 @@ const actions = [
 	{ name: ACTIONS.DIVIDE, fn: divide, symbol: '/' },
 ];
 
-const { isOkay, payload, errMessages } = validate(argv[2], argv[3], argv[4]);
-
-if (isOkay) {
+try {
+	const payload = validate(argv[2], argv[3], argv[4]);
 	print(calculate(payload, actions));
-} else {
-	printErrors(errMessages);
+} catch (err) {
+	printErrors(err);
 }

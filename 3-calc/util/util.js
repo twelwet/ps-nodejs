@@ -45,10 +45,10 @@ const validate = (argv2, argv3, argv4) => {
 	}
 
 	if (errMessages.length > 0) {
-		return { isOkay: false, payload: {}, errMessages };
+		throw new Error(`${errMessages.join('\n')}`);
 	}
 
-	return { isOkay: true, payload, errMessages };
+	return payload;
 };
 
 const calculate = (payload, actions) => {
@@ -66,9 +66,9 @@ const print = ({ valueOne, valueTwo, symbol, result }) => {
 	console.log(`${valueOne} ${symbol} ${valueTwo} = ${result}`);
 };
 
-const printErrors = (errMessages) => {
-	console.log('Невалидные данные:');
-	console.log(`${errMessages.join('\n')}`);
+const printErrors = (err) => {
+	console.log('Ошибка:');
+	console.log(`${err.message}`);
 	console.log('-----');
 	console.log('Пример валидного ввода:');
 	console.log('>node index.js 2 2 add');
