@@ -6,14 +6,14 @@ const ACTIONS = {
 };
 
 const isNumber = (value) => {
-	if (typeof value === 'number' && !Number.isNaN(value)) {
+	if (typeof Number(value) === 'number' && !Number.isNaN(Number(value))) {
 		return true;
 	}
 	return false;
 };
 
 const isDivisionByZero = (actionName, divider) => {
-	if (actionName === ACTIONS.DIVIDE && divider === 0) {
+	if (actionName.toUpperCase().toLowerCase() === ACTIONS.DIVIDE && Number(divider) === 0) {
 		return true;
 	} else {
 		return false;
@@ -21,34 +21,43 @@ const isDivisionByZero = (actionName, divider) => {
 };
 
 const validate = (argv2, argv3, argv4) => {
-	const payload = {
-		valueOne: Number(argv2),
-		valueTwo: Number(argv3),
-		actionName: argv4.toUpperCase().toLowerCase(),
-	};
 	const errMessages = [];
 
-	if (!isNumber(payload.valueOne)) {
-		errMessages.push(`Аргумент '${argv2}' должен быть числом.`);
+	for (const [index, value] of [argv2, argv3].entries()) {
+		switch (value) {
+			case undefined:
+				errMessages.push(`${index + 1}-й аргумент не определен.`);
+				break;
+			default:
+				if (!isNumber(value)) {
+					errMessages.push(`${index + 1}-й аргумент '${value}' должен быть числом.`);
+				}
+		}
 	}
 
-	if (!isNumber(payload.valueTwo)) {
-		errMessages.push(`Аргумент '${argv3}' должен быть числом.`);
+	switch (argv4) {
+		case undefined:
+			errMessages.push(`3-й аргумент не определен.`);
+			break;
+		default:
+			if (!Object.values(ACTIONS).find((it) => it === argv4.toUpperCase().toLowerCase())) {
+				errMessages.push(`3-й аргумент '${argv4}' должен быть одним из списка [ ${Object.values(ACTIONS).join(', ')} ].`);
+			}
+
+			if (isDivisionByZero(argv4, argv3)) {
+				errMessages.push(`Делитель не может быть равен нулю.`);
+			}
 	}
 
-	if (!Object.values(ACTIONS).find((it) => it === payload.actionName)) {
-		errMessages.push(`Аргумент '${argv4}' должен быть одним из списка [ ${Object.values(ACTIONS).join(', ')} ].`);
-	}
-
-	if (isDivisionByZero(payload.actionName, payload.valueTwo)) {
-		errMessages.push(`Делитель не может быть равен нулю.`);
-	}
-
-	if (errMessages.length > 0) {
+	if (errMessages.length === 0) {
+		return {
+			valueOne: Number(argv2),
+			valueTwo: Number(argv3),
+			actionName: argv4.toUpperCase().toLowerCase(),
+		};
+	} else {
 		throw new Error(`${errMessages.join('\n')}`);
 	}
-
-	return payload;
 };
 
 const calculate = (payload, actions) => {
