@@ -12,6 +12,14 @@ const isNumber = (value) => {
 	return false;
 };
 
+const isDivisionByZero = (actionName, divider) => {
+	if (actionName === ACTIONS.DIVIDE && divider === 0) {
+		return true;
+	} else {
+		return false;
+	}
+};
+
 const validate = (argv2, argv3, argv4) => {
 	const payload = {
 		valueOne: Number(argv2),
@@ -30,6 +38,10 @@ const validate = (argv2, argv3, argv4) => {
 
 	if (!Object.values(ACTIONS).find((it) => it === payload.actionName)) {
 		errMessages.push(`Аргумент '${argv4}' должен быть одним из списка [ ${Object.values(ACTIONS).join(', ')} ].`);
+	}
+
+	if (isDivisionByZero(payload.actionName, payload.valueTwo)) {
+		errMessages.push(`Делитель не может быть равен нулю.`);
 	}
 
 	if (errMessages.length > 0) {
