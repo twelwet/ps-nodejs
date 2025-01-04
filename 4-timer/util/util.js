@@ -11,7 +11,8 @@ const isNumber = (value) => {
 	return false;
 };
 
-const isValid = (value, unitMin, unitMax) => {
+const isValid = (argv, unitMin, unitMax) => {
+	const value = Number(argv);
 	if (!isNumber(value) || value < unitMin || value > unitMax) {
 		return false;
 	}
@@ -19,30 +20,36 @@ const isValid = (value, unitMin, unitMax) => {
 };
 
 const validate = (argv2, argv3, argv4) => {
-	const payload = {
-		hours: Number(argv2),
-		minutes: Number(argv3),
-		seconds: Number(argv4),
-	};
 	const errMessages = [];
 
-	if (!isValid(payload.hours, Hour.MIN, Hour.MAX)) {
-		errMessages.push(`Количество часов '${argv2}' должно быть числом в диапазоне от ${Hour.MIN} до ${Hour.MAX}.`);
+	const data = [
+		{ argv: argv2, minValue: Hour.MIN, maxValue: Hour.MAX, info: 'Количество часов' },
+		{ argv: argv3, minValue: Minute.MIN, maxValue: Minute.MAX, info: 'Количество минут' },
+		{ argv: argv4, minValue: Second.MIN, maxValue: Second.MAX, info: 'Количество секунд' },
+	];
+
+	for (const [index, item] of data.entries()) {
+		const { argv, minValue, maxValue, info } = item;
+		switch (argv) {
+			case undefined:
+				errMessages.push(`${index + 1}-й аргумент (${info}) не определен.`);
+				break;
+			default:
+				if (!isValid(argv, minValue, maxValue)) {
+					errMessages.push(`${info} '${argv}' должно быть числом в диапазоне от ${minValue} до ${maxValue}.`);
+				}
+		}
 	}
 
-	if (!isValid(payload.minutes, Minute.MIN, Minute.MAX)) {
-		errMessages.push(`Количество минут '${argv3}' должно быть числом в диапазоне от ${Minute.MIN} до ${Minute.MAX}.`);
+	if (errMessages.length === 0) {
+		return {
+			hours: Number(argv2),
+			minutes: Number(argv3),
+			seconds: Number(argv4),
+		};
+	} else {
+		throw new Error(`${errMessages.join('\n')}`);
 	}
-
-	if (!isValid(payload.seconds, Second.MIN, Second.MAX)) {
-		errMessages.push(`Количество секунд '${argv4}' должно быть числом в диапазоне от ${Second.MIN} до ${Second.MAX}.`);
-	}
-
-	if (errMessages.length > 0) {
-		return { isOkay: false, payload: {}, errMessages };
-	}
-
-	return { isOkay: true, payload, errMessages };
 };
 
 const getTimeInMiliseconds = ({ hours, minutes, seconds }) => {
@@ -71,9 +78,9 @@ const startTimer = ({ hours, minutes, seconds }) => {
 	}, ms);
 };
 
-const printErrors = (errMessages) => {
+const printErrors = (err) => {
 	console.log('Невалидные данные:');
-	console.log(`${errMessages.join('\n')}`);
+	console.log(`${err.message}`);
 	console.log('-----');
 	console.log('Пример валидного ввода:');
 	console.log('>node index.js 0 0 10');
