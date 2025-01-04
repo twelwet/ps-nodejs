@@ -1,3 +1,3 @@
-const divide = (a, b) => b === 0 ? undefined : a / b;
+const divide = (a, b) => a / b;
 
 module.exports = divide;

@@ -20,10 +20,9 @@ for (const action of actions) {
 }
 myEmitter.on(false, printErrors);
 
-const { isOkay, payload, errMessages } = validate(argv[2], argv[3], argv[4]);
-
-if (isOkay) {
+try {
+	const payload = validate(argv[2], argv[3], argv[4]);
 	myEmitter.emit(payload.actionName, calculate(payload, actions));
-} else {
-	myEmitter.emit(false, errMessages);
+} catch (err) {
+	myEmitter.emit(false, err);
 }
