@@ -1,6 +1,23 @@
-const Hour = { MIN: 0, MAX: 23 };
-const Minute = { MIN: 0, MAX: 59 };
-const Second = { MIN: 0, MAX: 59 };
+const HOUR = (argv) => ({
+	argv,
+	minValue: 0,
+	maxValue: 23,
+	message: 'Количество часов',
+});
+
+const MINUTE = (argv) => ({
+	argv,
+	minValue: 0,
+	maxValue: 59,
+	message: 'Количество минут',
+});
+
+const SECOND = (argv) => ({
+	argv,
+	minValue: 0,
+	maxValue: 59,
+	message: 'Количество секунд',
+});
 
 const INTERVAL_TIME = 1000;
 
@@ -22,21 +39,17 @@ const isValid = (argv, unitMin, unitMax) => {
 const validate = (argv2, argv3, argv4) => {
 	const errMessages = [];
 
-	const data = [
-		{ argv: argv2, minValue: Hour.MIN, maxValue: Hour.MAX, info: 'Количество часов' },
-		{ argv: argv3, minValue: Minute.MIN, maxValue: Minute.MAX, info: 'Количество минут' },
-		{ argv: argv4, minValue: Second.MIN, maxValue: Second.MAX, info: 'Количество секунд' },
-	];
+	const data = [ HOUR(argv2), MINUTE(argv3), SECOND(argv4) ];
 
 	for (const [index, item] of data.entries()) {
-		const { argv, minValue, maxValue, info } = item;
+		const { argv, minValue, maxValue, message } = item;
 		switch (argv) {
 			case undefined:
-				errMessages.push(`${index + 1}-й аргумент (${info}) не определен.`);
+				errMessages.push(`${index + 1}-й аргумент (${message}) не определен.`);
 				break;
 			default:
 				if (!isValid(argv, minValue, maxValue)) {
-					errMessages.push(`${info} '${argv}' должно быть числом в диапазоне от ${minValue} до ${maxValue}.`);
+					errMessages.push(`${message} '${argv}' должно быть числом в диапазоне от ${minValue} до ${maxValue}.`);
 				}
 		}
 	}
