@@ -30,7 +30,7 @@ const validateLanguage = (lang) => {
 		return result;
 	}
 	else {
-		printError(`Невалидный язык '${result}', задайте через параметр '-l [LANG]'. Допустимые значения: ${Object.values(LANGUAGES)}`);
+		printError(`Невалидный язык '${result}', задайте через параметр '-l [LANG]'. Допустимые значения: ${Object.values(LANGUAGE)}`);
 		return false;
 	}
 };

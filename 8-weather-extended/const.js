@@ -38,4 +38,11 @@ const ICONS = new Map([
 	['50', '🌫️'],
 ]);
 
-export { LANGUAGE, DICTIONARY, DATA_FIELD, ICONS };
+const CLI_KEYS = {
+	HELP: 'h',
+	TOKEN: 't',
+	LANGUAGE: 'l',
+	CITIES: 's',
+};
+
+export { LANGUAGE, DICTIONARY, DATA_FIELD, ICONS, CLI_KEYS };
