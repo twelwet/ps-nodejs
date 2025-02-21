@@ -7,9 +7,7 @@ const {
 	getArrayDescription,
 } = require('./util/util.js');
 
-const INITIAL_ARRAY_SIZE = 300000;
-const DIVIDER = 3;
-const DEFAULT_THREADS = 4;
+const {INITIAL_ARRAY_SIZE, DIVIDER, DEFAULT_THREADS } = require('./constant.js');
 
 const availableThreads = os.availableParallelism ? os.availableParallelism() : DEFAULT_THREADS;
 
