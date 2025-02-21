@@ -36,23 +36,24 @@ const isValid = (argv, unitMin, unitMax) => {
 	return true;
 };
 
-const validate = (argv2, argv3, argv4) => {
+const collectErrors = (data) => {
 	const errMessages = [];
-
-	const data = [ HOUR(argv2), MINUTE(argv3), SECOND(argv4) ];
 
 	for (const [index, item] of data.entries()) {
 		const { argv, minValue, maxValue, message } = item;
-		switch (argv) {
-			case undefined:
-				errMessages.push(`${index + 1}-й аргумент (${message}) не определен.`);
-				break;
-			default:
-				if (!isValid(argv, minValue, maxValue)) {
-					errMessages.push(`${message} '${argv}' должно быть числом в диапазоне от ${minValue} до ${maxValue}.`);
-				}
+		if (argv === undefined) {
+			errMessages.push(`${index + 1}-й аргумент (${message}) не определен.`);
+		} else if (!isValid(argv, minValue, maxValue)) {
+			errMessages.push(`${index + 1}-й аргумент (${message}) должно быть числом в диапазоне от ${minValue} до ${maxValue}.`);
 		}
 	}
+
+	return errMessages;
+};
+
+const validate = (argv2, argv3, argv4) => {
+	const data = [ HOUR(argv2), MINUTE(argv3), SECOND(argv4) ];
+	const errMessages = collectErrors(data);
 
 	if (errMessages.length === 0) {
 		return {
