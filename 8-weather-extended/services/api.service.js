@@ -1,28 +1,11 @@
 import axios from 'axios';
 import { getKeyValue } from './storage.service.js';
 import { printSuccess, printError, printWeather } from './log.service.js';
+import { ICONS } from '../const.js';
 
-const getIcon = (icon) => {
-	switch (icon.slice(0, -1)) {
-		case '01':
-			return '☀️';
-		case '02':
-			return '🌤️';
-		case '03':
-			return '☁️';
-		case '04':
-			return '☁️';
-		case '09':
-			return '🌧️';
-		case '10':
-			return '🌦️';
-		case '11':
-			return '🌩️';
-		case '13':
-			return '❄️';
-		case '50':
-			return '🌫️';
-	}
+const getIcon = (iconFromAPI, icons) => {
+	const iconCode = iconFromAPI.slice(0, -1);
+	return icons.get(iconCode);
 };
 
 const getWeather = async (token, language, city) => {
@@ -55,7 +38,7 @@ const isCityExist = async (token, language, city) => {
 const getForcast = async (token, language, cities) => {
 	for (const city of cities) {
 		const data = await getWeather(token, language, city);
-		let icon = getIcon(data.weather[0].icon);
+		let icon = getIcon(data.weather[0].icon, ICONS);
 		printWeather(data, icon, language);
 	}
 };
