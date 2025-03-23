@@ -1,0 +1,7 @@
+extends ../layout.pug
+
+block main
+	h1 Ошибка #{err.status}
+	p #{err.message}
+	a(href="/") На главную
+	a(href="/settings") Настройки

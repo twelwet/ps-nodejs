@@ -1,0 +1,13 @@
+extends layout.pug
+
+block main
+	h1 Настройки
+	form(action="/settings", method="POST")
+		ul
+			li 
+				label(for="city") Город
+				input#city(name="cityName"  value= cityName)
+			li
+				label(for="token") Токен
+				input#token(name="tokenName"  value= tokenName)
+		button(type="submit") Сохранить

@@ -1,0 +1,8 @@
+extends main.pug
+
+block info
+	div.info
+		div ☂️ #{forcast.weatherIn.key}: #{forcast.weatherIn.value} (#{forcast.description.key} #{forcast.description.value})
+		div 🌡️ #{forcast.temperature.key}: #{forcast.temperature.value}℃ (#{forcast.feelsLike.key} #{forcast.feelsLike.value}℃)
+		div 💦 #{forcast.humidity.key}: #{forcast.humidity.value}%
+		div 🌀 #{forcast.windSpeed.key}: #{forcast.windSpeed.value}м/с

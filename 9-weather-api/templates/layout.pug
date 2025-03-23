@@ -1,0 +1,20 @@
+doctype html
+html(lang="ru")
+	head
+		title ☂️Прогноз погоды
+		link(rel="stylesheet", href="css/style.css")
+	body
+		.container
+			.nav
+				ul.nav-list
+					li
+						a(href="/") На главную
+					li
+						a(href="/settings") Настройки
+			.wrapper
+				.content
+					block main
+					block info
+				.footer
+					p.footer-info Используется API 
+						a(href='https://openweathermap.org/api') openweathermap.org
