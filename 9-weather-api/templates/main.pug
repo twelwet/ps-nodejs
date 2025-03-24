@@ -1,0 +1,10 @@
+extends layout.pug
+
+block main
+	h1 Прогноз погоды
+	form(action="/", method="POST")
+		ul
+			li
+				label(for="city") Город
+				input#city(name="cityName"  value= cityName)
+		button(type="submit") Узнать
