@@ -1,4 +1,4 @@
-import { storage, api } from "../services/services.js";
+import { storage } from "../services/services.js";
 
 class Parameter {
 	constructor(key) {
