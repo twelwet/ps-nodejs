@@ -1,0 +1,4 @@
+/node_modules
+/dist
+weather-data.json
+token.json
