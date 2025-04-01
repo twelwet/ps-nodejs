@@ -4,35 +4,32 @@ import { readFile, writeFile } from './util.js';
 import { paramKey, IData } from '../../types.js';
 
 class Storage {
-	async getKeyValue(key: paramKey, path: string = FILEPATH): Promise<string | false> {
+	async getKeyValue(key: paramKey, path: string = FILEPATH): Promise<string | null> {
 		try {
 			const data = await readFile(path);
-			if (typeof data === 'object' && data.hasOwnProperty(key)) {
-				return data[key];	
-			}
-			return false;
+			return data ? data[key] : data;
 		} catch (err) {
 			if (err instanceof Error) {
 				logger.printError(`Ошибка чтения файла: ${err.message}`);
 			}
-			return false;
+			return null;
 		}
 	}
 
-	async saveKeyValue(key: paramKey, value: string, path: string = FILEPATH): Promise<IData | false> {
+	async saveKeyValue(key: paramKey, value: string, path: string = FILEPATH): Promise<boolean> {
 		try {
 			const data = await readFile(path);
-			if (typeof data === 'object') {
-				data[key] = value;
-				await writeFile(path, data);
+			switch (data) {
+				case null:
+					const newData: IData = { city: '', token: '' };
+					newData[key] = value;
+					logger.printSuccess(`Задан ${key}: '${value}'`);
+					return await writeFile(path, newData);
+				default:
+					data[key] = value;
+					logger.printSuccess(`Задан ${key}: '${value}'`);
+					return await writeFile(path, data);
 			}
-			if (!data) {
-				const newData: IData = { city: '', token: '' };
-				newData[key] = value;
-				await writeFile(path, newData);
-			}
-			logger.printSuccess(`Задан ${key}: '${value}'`);
-			return data;
 		} catch (err) {
 			if (err instanceof Error) {
 				logger.printError(`Ошибка записи файла: ${err.message}`);

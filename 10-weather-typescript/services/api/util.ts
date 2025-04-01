@@ -9,8 +9,8 @@ const getIcon = (iconFromAPI: string, icons = ICONS): string | undefined => {
 };
 
 const getParams = (
-	tokenValue: string | false,
-	cityValue: string | false,
+	tokenValue: string | null,
+	cityValue: string | null,
 	lang = LANGUAGE,
 	units = UNITS
 ): object => ({
@@ -21,34 +21,34 @@ const getParams = (
 });
 
 const getWeatherFromAPI = async (
-	tokenName: string | false,
-	cityValue: string | false
-): Promise<IDataFromAPI | false> => {
+	tokenName: string | null,
+	cityValue: string | null
+): Promise<IDataFromAPI | null> => {
 	try {
 		const params = getParams(tokenName, cityValue);
 		const { data } = await axios.get(API_URL, { params });
 		return data;
 	} catch(err) {
-		return false;
+		return null;
 	}
 };
 
 const validate = async (
-	paramValue: string | false,
+	paramValue: string | null,
 	paramCLIKey: paramCLIKey,
 	paramKey: paramKey,
-	tokenValue: string | false,
-	cityValue: string | false,
+	tokenValue: string | null,
+	cityValue: string | null,
 ): Promise<boolean> => {
 	if (!paramValue) {
 		logger.printError(`Параметр ${paramKey} НЕ задан, задайте через ключ -${paramCLIKey}`);
 		return false;
 	}
 
-	let data: IDataFromAPI | false = false;
+	let data: IDataFromAPI | null = null;
 	if (tokenValue && cityValue) {
 		data = await getWeatherFromAPI(tokenValue, cityValue);
-		if (data === false) {
+		if (!data) {
 			logger.printError(`Параметр ${paramKey} НЕ является валидным, задайте через ключ -${paramCLIKey}`);
 			return false;
 		}
@@ -59,10 +59,10 @@ const validate = async (
 };
 
 const getWeather = async (
-	tokenName: string | false,
-	cityName: string | false
+	tokenName: string | null,
+	cityName: string | null
 ): Promise<void> => {
-	const data: IDataFromAPI | false = await getWeatherFromAPI(tokenName, cityName);
+	const data: IDataFromAPI | null = await getWeatherFromAPI(tokenName, cityName);
 	let icon: string | undefined = undefined;
 	if (data) {
 		icon = getIcon(data.weather[0].icon);

@@ -1,12 +1,12 @@
 import { promises } from 'node:fs';
 import { IData } from '../../types';
 
-const readFile = async (path: string): Promise<IData | false> => {
+const readFile = async (path: string): Promise<IData | null> => {
 	try {
 		const file = await promises.readFile(path);
 		return JSON.parse(file.toString());
 	} catch (err) {
-		return false;
+		return null;
 	}
 };
 

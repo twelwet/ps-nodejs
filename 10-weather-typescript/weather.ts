@@ -26,7 +26,7 @@ const initCLI = async () => {
 	const tokenValue = await token.read();
 	const isTokenValid = await api.validateToken(tokenValue);
 
-	let cityValue: string | false = false;
+	let cityValue: string | null = null;
 	let isCityValid: Boolean = false;
 
 	if (isTokenValid) {

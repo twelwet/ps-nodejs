@@ -9,22 +9,22 @@ import {
 
 class API {
 	async validateToken(
-		tokenValue: string | false,
+		tokenValue: string | null,
 		cityValue: string = VALID_CITY_NAME
 	): Promise<boolean> {
 		return await validate(tokenValue, CLI_KEY_TOKEN, TOKEN_KEY, tokenValue, cityValue);
 	}
 
 	async validateCity(
-		tokenValue: string | false,
-		cityValue: string | false
+		tokenValue: string | null,
+		cityValue: string | null
 	): Promise<boolean> {
 		return await validate(cityValue, CLI_KEY_CITY, CITY_KEY, tokenValue, cityValue);
 	}
 
 	async getForcast(
-		tokenName: string | false,
-		cityName: string | false
+		tokenName: string | null,
+		cityName: string | null
 	): Promise<void> {
 		await getWeather(tokenName, cityName);
 	}

@@ -8,14 +8,14 @@ class Parameter {
 		this.key = key;
 	}
 
-	async save(value: string): Promise<IData | false> {
+	async save(value: string): Promise<boolean> {
 		return await storage.saveKeyValue(this.key, value);
 	}
 
-	async read(): Promise<string | false> {
-		const value: string | false = await storage.getKeyValue(this.key);
+	async read(): Promise<string | null> {
+		const value: string | null = await storage.getKeyValue(this.key);
 		if (typeof value === 'string' && value.length === 0) {
-			return false;
+			return null;
 		}
 		return value;
 	}
