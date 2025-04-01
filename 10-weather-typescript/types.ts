@@ -50,4 +50,11 @@ interface IDataFromAPI {
 	cod: number;
 };
 
-export { paramKey, paramCLIKey, IData, IDataFromAPI };
+interface IParamsForAPI {
+	q: string | null,
+	appid: string | null,
+	lang: string,
+	units: string,
+}
+
+export { paramKey, paramCLIKey, IData, IDataFromAPI, IParamsForAPI };

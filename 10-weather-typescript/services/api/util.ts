@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { logger } from '../services.js';
 import { API_URL, LANGUAGE, UNITS, ICONS } from './const.js';
-import { IDataFromAPI, paramKey, paramCLIKey } from '../../types.js';
+import { IDataFromAPI, paramKey, paramCLIKey, IParamsForAPI } from '../../types.js';
 
 const getIcon = (iconFromAPI: string, icons = ICONS): string | undefined => {
 	const iconCode = iconFromAPI.slice(0, -1);
@@ -13,7 +13,7 @@ const getParams = (
 	cityValue: string | null,
 	lang = LANGUAGE,
 	units = UNITS
-): object => ({
+): IParamsForAPI => ({
 	q: cityValue,
 	appid: tokenValue,
 	lang,
