@@ -1,22 +1,18 @@
 import { Server } from 'node:http';
 import express, { Express } from 'express';
 import { UserController } from './users/user.controller';
-import { LoggerService } from './logger/logger.service';
 import { ExeptionFilter } from './errors/exeption.filter';
+import { ILogger } from './logger/logger.interface';
 
 export class App {
 	app: Express;
 	server: Server;
 	port: number;
-	logger: LoggerService;
+	logger: ILogger;
 	userController: UserController;
 	exeptionFilter: ExeptionFilter;
 
-	constructor(
-		logger: LoggerService,
-		userController: UserController,
-		exeptionFilter: ExeptionFilter,
-	) {
+	constructor(logger: ILogger, userController: UserController, exeptionFilter: ExeptionFilter) {
 		this.app = express();
 		this.port = 8000;
 		this.logger = logger;
