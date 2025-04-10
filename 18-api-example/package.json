@@ -8,7 +8,7 @@
   ],
   "license": "ISC",
   "author": "Maksim Akimov",
-  "type": "module",
+  "type": "commonjs",
   "main": "main.js",
   "scripts": {
     "start": "node ./dist/main.js",
