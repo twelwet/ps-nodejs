@@ -4,6 +4,7 @@ import { IExeptionFilter } from './errors/exeption.filter.interface';
 import { ExeptionFilter } from './errors/exeption.filter';
 import { ILogger } from './logger/logger.interface';
 import { LoggerService } from './logger/logger.service';
+import { IUserController } from './users/user.controller.interface';
 import { UserController } from './users/user.controller';
 import { TYPES } from './types';
 
@@ -11,7 +12,7 @@ export const appBindings = new ContainerModule((options: ContainerModuleLoadOpti
 	const { bind } = options;
 	bind<ILogger>(TYPES.ILogger).to(LoggerService);
 	bind<IExeptionFilter>(TYPES.IExeptionFilter).to(ExeptionFilter);
-	bind<UserController>(TYPES.UserController).to(UserController);
+	bind<IUserController>(TYPES.IUserController).to(UserController);
 	bind<App>(TYPES.Application).to(App);
 });
 

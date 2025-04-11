@@ -5,9 +5,10 @@ import { HTTPError } from '../errors/http-error.class';
 import { TYPES } from '../types';
 import { injectable, inject } from 'inversify';
 import 'reflect-metadata';
+import { IUserController } from './user.controller.interface';
 
 @injectable()
-export class UserController extends BaseController {
+export class UserController extends BaseController implements IUserController {
 	constructor(@inject(TYPES.ILogger) private loggerService: ILogger) {
 		super(loggerService);
 		this.bindRoutes([
