@@ -2,7 +2,7 @@ import { Server } from 'node:http';
 import express, { Express } from 'express';
 import { json } from 'body-parser';
 import { ILogger } from './logger/logger.interface';
-import { UserController } from './users/user.controller';
+import { UsersController } from './users/users.controller';
 import { IExeptionFilter } from './errors/exeption.filter.interface';
 import { TYPES } from './types';
 import { injectable, inject } from 'inversify';
@@ -16,7 +16,7 @@ export class App {
 
 	constructor(
 		@inject(TYPES.ILogger) private logger: ILogger,
-		@inject(TYPES.IUserController) private userController: UserController,
+		@inject(TYPES.IUsersController) private usersController: UsersController,
 		@inject(TYPES.IExeptionFilter) private exeptionFilter: IExeptionFilter,
 	) {
 		this.app = express();
@@ -28,7 +28,7 @@ export class App {
 	}
 
 	useRoutes() {
-		this.app.use('/users', this.userController.router);
+		this.app.use('/users', this.usersController.router);
 	}
 
 	useExeptionFilters() {
