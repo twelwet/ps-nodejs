@@ -7,6 +7,7 @@ import { IExeptionFilter } from './errors/exeption.filter.interface';
 import { TYPES } from './types';
 import { injectable, inject } from 'inversify';
 import 'reflect-metadata';
+import { PrismaService } from './database/prisma.service';
 
 @injectable()
 export class App {
@@ -18,6 +19,7 @@ export class App {
 		@inject(TYPES.ILogger) private logger: ILogger,
 		@inject(TYPES.IUsersController) private usersController: UsersController,
 		@inject(TYPES.IExeptionFilter) private exeptionFilter: IExeptionFilter,
+		@inject(TYPES.PrismaService) private prismaService: PrismaService,
 	) {
 		this.app = express();
 		this.port = 8000;
@@ -39,6 +41,7 @@ export class App {
 		this.useMiddlewares();
 		this.useRoutes();
 		this.useExeptionFilters();
+		await this.prismaService.connect();
 		this.server = this.app.listen(this.port);
 		this.logger.log(`Сервер запущен на localhost:${this.port}`);
 	}
