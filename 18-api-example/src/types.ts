@@ -1,0 +1,12 @@
+export const TYPES = {
+	Application: Symbol.for('Application'),
+	ILogger: Symbol.for('ILogger'),
+	IUsersController: Symbol.for('IUsersController'),
+	UserService: Symbol.for('UserService'),
+	IUserService: Symbol.for('IUserService'),
+	IExeptionFilter: Symbol.for('IExeptionFilter'),
+	IConfigService: Symbol.for('IConfigSevice'),
+	PrismaService: Symbol.for('PrismaService'),
+	UsersRepository: Symbol.for('UsersRepository'),
+	IUsersRepository: Symbol.for('IUsersRepository'),
+};

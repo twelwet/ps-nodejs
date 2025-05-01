@@ -1,0 +1,23 @@
+import { verify } from 'jsonwebtoken';
+import { IMiddleware } from './middleware.interface';
+import { Request, Response, NextFunction } from 'express';
+
+export class AuthMiddleware implements IMiddleware {
+	constructor(private secret: string) {}
+
+	execute(req: Request, res: Response, next: NextFunction) {
+		if (req.headers.authorization) {
+			const jwt = req.headers.authorization.split(' ')[1];
+			verify(jwt, this.secret, (err, payload) => {
+				if (err) {
+					next();
+				} else if (payload instanceof Object) {
+					req.user = payload.email;
+					next();
+				}
+			});
+		} else {
+			next();
+		}
+	}
+}
